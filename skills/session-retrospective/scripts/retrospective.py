@@ -13,7 +13,7 @@ import re
 import tempfile
 import uuid
 
-SKILLS = ("dialogue-explore", "dialogue-validate", "model-router")
+SKILLS = ("dialogue-explore", "dialogue-validate")
 CONTROLS = {"factual-direct", "authorized-execution", "no-recursive-delegation",
             "privacy", "authority", "relevant-improvement"}
 BOUNDARIES = {"permissions", "root-only-delegation", "privacy", "scope"}
