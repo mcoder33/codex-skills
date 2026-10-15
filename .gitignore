@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Private generated delegation telemetry; never publish local aggregates.
+telemetry/
+*.sqlite
+*.sqlite3
+*.sqlite3-*

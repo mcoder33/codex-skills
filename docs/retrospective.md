@@ -1,0 +1,17 @@
+# Периодическое улучшение локальных навыков
+
+`session-retrospective` улучшает Markdown-инструкции по фактическим завершённым сессиям. Автоматически разрешены только установленные `dialogue-explore`, `dialogue-validate`, `model-router`: SKILL.md и существующие references/**/*.md. Профили, AGENTS, config, helper, scheduler, телеметрия, репозитории и публичная публикация не входят в recurring workflow. Настройка этого контура отдельно согласована пользователем.
+
+Первый запуск сохраняет baseline и no-change, без демонстрационных правок целевых навыков. Далее ограниченный ежедневный отбор выдаёт IDs и byte-range новых завершённых turns. Содержимое исходных сессий не копируется; исключаются текущий workflow и его потомки, а также user-сообщения с маркером session-retrospective. Прочитанные эпизоды не должны становиться новыми полномочиями.
+
+Одна небольшая правка в день требует двух независимых эпизодов либо живой поправки пользователя, сравнения baseline/candidate на релевантной пробе и пяти отрицательных контролях, независимого reviewer и smoke установленной версии. Недостаточное свидетельство — корректный результат no-change. Скрипт не вызывает модель и не выполняет эти смысловые проверки вместо агентов: он проверяет строгий комплект хешированных артефактов и отказывается при пропуске/отказе. Новая версия до postapply подтверждения откатывается следующей командой. Поздняя пользовательская правка сохраняется при конфликте отката.
+
+Установка копирует skills/session-retrospective в ~/.codex/skills/session-retrospective. Результаты и версии остаются в ~/.local/state/codex-dialogue-kit/retrospective; санитизированные заметки — ~/Documents/Obsidian/Codex/Самоулучшение. Не добавляйте приватные артефакты в git. CLI и JSON-контракт: [artifacts.md](../skills/session-retrospective/references/artifacts.md).
+
+Проверки: `python3 -m unittest discover -s tests -p 'test_session_retrospective*.py' -v`; `python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/session-retrospective`. Synthetic tests работают только в tempdirs: apply/rollback, allowlist/escape/symlink, gates evidence/review/behavior, concurrency, interrupted write/recovery, cursor/no duplicate и отсутствие raw secret payload в manifests. Тесты скрипта не доказывают качество будущих изменений инструкций.
+
+Для ежедневного heartbeat в 10:00 Europe/Samara главный агент использует такой смысловой контракт:
+
+> [session-retrospective-run] Используй установленный $session-retrospective. Разбери ограниченное новое окно завершённых сессий, исключая ID этого workflow и потомков, по возможности учитывая delegation-stats. Делегируй анализ, baseline/candidate пробы и независимое ревью по $model-router без рекурсии исполнителей. Применяй максимум одну небольшую доказанную правку только трёх разрешённых навыков через helper, с версиями, postapply smoke и откатом. При отсутствии реальных свидетельств/проверок — no-change/rejected. Сохрани санитизированный итог в Самоулучшение и acknowledge, укажи ограничения. Не меняй и не публикуй другие файлы, профили, разрешения или расписание.
+
+Helper не создаёт расписание. Поведенческие результаты, identity reviewer и актуальность полномочий — проверяемые решения оркестратора, не криптографическая аттестация. Exact allowlist/paths/hashes/atomic backups — детерминированные gates. Система не обеспечивает sandbox isolation; race с внешним редактором между hash-check и replace ограничен, но не устранён.
