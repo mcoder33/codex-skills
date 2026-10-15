@@ -1,0 +1,6 @@
+interface:
+  display_name: "Проверить план вместе"
+  short_description: "Проверка оснований и пропущенных сценариев в диалоге"
+  default_prompt: "Используй $dialogue-validate: давай последовательно проверим ключевые решения этого плана и обновим карту в Obsidian."
+policy:
+  allow_implicit_invocation: true
