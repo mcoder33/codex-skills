@@ -118,6 +118,17 @@ class RetrospectiveTests(unittest.TestCase):
         with self.assertRaises(retro.Rejected):
             self.store.internal("versions/../../outside")
 
+    def test_unapproved_existing_skills_cannot_be_snapshotted(self):
+        for skill in ("model-router", "nasa"):
+            for relative in ("SKILL.md", "references/notes.md"):
+                with self.subTest(skill=skill, relative=relative):
+                    target = self.skills / skill / relative
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(self.original)
+                    with self.assertRaisesRegex(retro.Rejected, "not allowlisted"):
+                        self.store.snapshot(f"{skill}/{relative}")
+                    self.assertEqual(target.read_bytes(), self.original)
+
     def test_target_and_parent_symlinks_rejected(self):
         self.target.unlink()
         self.target.symlink_to(self.candidate)
