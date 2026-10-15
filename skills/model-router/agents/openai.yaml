@@ -1,0 +1,4 @@
+interface:
+  display_name: "Model Router"
+  short_description: "Подбор модели и контракта подагента"
+  default_prompt: "Используй $model-router, чтобы выбрать модель и ограниченный контракт подагента для этой задачи."

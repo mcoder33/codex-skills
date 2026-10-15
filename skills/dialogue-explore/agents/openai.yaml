@@ -1,0 +1,6 @@
+interface:
+  display_name: "Исследовать проблему вместе"
+  short_description: "Пошаговый диалог от проблемы к плану с картой связей"
+  default_prompt: "Используй $dialogue-explore: помоги мне последовательно разобраться в проблеме и прийти к плану, обновляя карту в Obsidian."
+policy:
+  allow_implicit_invocation: true

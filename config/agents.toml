@@ -1,0 +1,17 @@
+# Merge these tables into config.toml; do not replace the file.
+# Paths are relative to the directory containing config.toml.
+[agents.routed-scout]
+description = "Узкий сбор проверяемых фактов без изменений."
+config_file = "agents/routed-scout.toml"
+
+[agents.routed-worker]
+description = "Реализация в явно выделенной области."
+config_file = "agents/routed-worker.toml"
+
+[agents.routed-reviewer]
+description = "Независимая проверка без изменений."
+config_file = "agents/routed-reviewer.toml"
+
+[agents.routed-expert]
+description = "Разбор сложных противоречий без изменений."
+config_file = "agents/routed-expert.toml"
