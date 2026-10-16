@@ -1,0 +1,16 @@
+# Совместимость hooks — 2026-10-16
+
+| Проверка | Свидетельство и предел |
+|---|---|
+| Локальный CLI | `codex --version`: 0.162.1. Это не версия всех клиентов. |
+| Формат входа/выхода | Сверен с https://learn.chatgpt.com/docs/hooks . JSON stdin, hookSpecificOutput.additionalContext для SessionStart, systemMessage для предупреждений. |
+| Источник конфигурации | User hooks.json; installer сохраняет Serena и work-memory. Plugin installation не требуется. |
+| Trust | Новые определения требуют /hooks review/trust. Не обходится установщиком. |
+| turn_id | CODEX_THREAD_ID доступен в исследованном окружении, CODEX_TURN_ID отсутствует. Поэтому технический UserPromptSubmit receipt даёт current turn без чтения нестабильного transcript. |
+| Ограничения | Python 3.11+, POSIX flock. Timeout обработчика 3 секунды; отказ виден, работа продолжается. |
+| Синтетические события | Проверяются реальными процессами Python и временными файлами. Это проверка адаптера, не dispatch клиента. |
+| Trust и UserPromptSubmit | Пользователь сообщил, что все определения доверены; trust-записи трёх обработчиков присутствуют. В текущем чате нативно создан turn receipt без prompt. |
+| Нативный startup/resume/compact/Stop | Protocol-only thread/start → unsubscribe → resume без модельных ходов не дал restore receipt. Это не доказывает dispatch на пользовательском ходе. Проверка compact и Stop текущей сессии продолжается. |
+| Качество диалога Sol / medium | Требуется пилот. Механические тесты не дают такого вывода. |
+
+Отказоустойчивость: если hooks недоступны, helper может применяться явно с фактическими ID. Если ID или vault недоступны, сохраняется прежний контракт навыка и компактная карта в чате с указанием несохранённой части. Автоматического поиска последней чужой сессии нет.

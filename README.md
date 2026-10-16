@@ -101,3 +101,7 @@ $nasa Разбери задачу добавления скидок в серв�
 ## Ограниченное улучшение навыков
 
 Дополнительный навык [session-retrospective](skills/session-retrospective/SKILL.md) готовит небольшие изменения только двух dialogue-навыков по завершённым сессиям. Автоприменение требует текущего разрешения пользователя, поведенческих проверок и независимого ревью. `nasa` и `model-router` в область автоизменений не входят. Установка сама не создаёт расписание и не разрешает правки. Порядок, проверки и откат описаны в [docs/retrospective.md](docs/retrospective.md).
+
+## Необязательное состояние навыков и hooks
+
+[Runtime v1](docs/skill-runtime.md) сохраняет точку применения dialogue-explore, dialogue-validate и nasa, восстанавливает её после compaction и предупреждает о пропущенном checkpoint. Поддерживает соседние hooks общей памяти. Установка — с preview, резервированием и откатом; новые hooks требуют штатного review/trust. [Совместимость](docs/hooks-compatibility.md), [план пилота Sol / medium](docs/runtime-pilot.md).
