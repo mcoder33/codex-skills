@@ -1,0 +1,4 @@
+interface:
+  display_name: "Дашборды Grafana"
+  short_description: "Создание, упрощение и проверка дашбордов Grafana"
+  default_prompt: "Используй $grafana-dashboards, чтобы улучшить дашборд Grafana и проверить смысл метрик и отображение."
