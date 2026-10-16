@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import tempfile
 
@@ -232,7 +233,7 @@ def hook(payload, root=None):
         # Technical turn receipt only; never retain prompt or automatically select a skill.
         with locked(path):
             atomic(path.parent / "turn.json", encode({"turn_id": turn,
-                   "maintenance": str(payload.get("prompt", "")).startswith("[work-memory maintenance]")}))
+                   "maintenance": bool(re.match(r'(?:<hook_prompt\s+hook_run_id="[^"\n]+">\s*)?\[work-memory maintenance\]', str(payload.get("prompt", "")).lstrip()))}))
         return {}
     if not path.exists():
         return {}
@@ -244,15 +245,18 @@ def hook(payload, root=None):
         if kind == "Stop":
             if payload.get("stop_hook_active"):
                 return {}  # work-memory's service continuation must not become skill work
-            if not turn:
-                return {"systemMessage": "Skill state: Stop has no turn_id; checkpoint freshness unknown."}
-            if state.get("last_checkpoint_turn_id") == turn and map_current(state):
+            if map_current(state):
                 event(path, "stop_checkpoint_current", turn, state["revision"])
                 return {}
-            if not event(path, "missing_checkpoint", turn, state["revision"]):
+            try:
+                observed = map_digest(state["map_path"])[1]
+            except (OSError, ValueError, KeyError):
+                observed = "missing"
+            # Warn once per actual map discrepancy, not on every explanatory turn.
+            if not event(path, "map_checkpoint_mismatch", observed, state["revision"]):
                 return {}
-            return {"systemMessage": "Skill state: no current map checkpoint for this turn. "
-                    "Save significant changes or explicitly mark unchanged. This warning does not continue the turn."}
+            return {"systemMessage": "Skill state: saved map is missing or differs from its checkpoint. "
+                    "Re-read and save the changed map when available. This warning does not continue the turn."}
         if not map_current(state):
             return {"systemMessage": "Skill state: map changed or unavailable; re-read it before restoring. "
                     "Stored decisions were not injected."}

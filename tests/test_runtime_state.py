@@ -126,10 +126,12 @@ class RuntimeTest(unittest.TestCase):
         self.assertEqual(self.event("Stop", turn_id="turn-one"), {})
         events = [json.loads(p.read_text()) for p in (self.path.parent / "events").glob("*.json")]
         self.assertTrue(any(e["event"] == "stop_checkpoint_current" for e in events))
-        first = self.event("Stop", turn_id="turn-two")
+        self.assertEqual(self.event("Stop", turn_id="turn-two"), {})
+        self.map.write_text("Changed requirement")
+        first = self.event("Stop", turn_id="turn-three")
         self.assertIn("systemMessage", first)
         self.assertNotIn("decision", first)
-        self.assertEqual(self.event("Stop", turn_id="turn-two"), {})
+        self.assertEqual(self.event("Stop", turn_id="turn-four"), {})
         self.assertEqual(self.event("Stop", turn_id="service", stop_hook_active=True), {})
 
     def test_finish_disables_restore_and_warnings(self):
@@ -169,6 +171,12 @@ class RuntimeTest(unittest.TestCase):
             self.checkpoint(turn=None)
         with self.assertRaisesRegex(ValueError, "maintenance"):
             self.checkpoint(turn="service")
+
+    def test_native_maintenance_wrapper_is_recognized(self):
+        self.event("UserPromptSubmit", turn_id="service", prompt='<hook_prompt hook_run_id="stop:8:x">[work-memory maintenance] save</hook_prompt>')
+        self.activate()
+        with self.assertRaisesRegex(ValueError, "maintenance"):
+            self.checkpoint(turn=None)
 
     def test_previous_turn_cannot_replace_current_receipt(self):
         self.activate()
