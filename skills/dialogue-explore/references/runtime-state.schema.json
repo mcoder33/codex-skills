@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codex-skills:runtime-checkpoint:1",
+  "title": "Skill runtime checkpoint v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal",
+    "phase",
+    "constraints",
+    "decisions",
+    "open_question",
+    "next_action",
+    "waiting_for_user"
+  ],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "maxLength": 1200,
+      "minLength": 1
+    },
+    "phase": {
+      "type": "string",
+      "maxLength": 1200
+    },
+    "open_question": {
+      "type": "string",
+      "maxLength": 1200
+    },
+    "next_action": {
+      "type": "string",
+      "maxLength": 1200
+    },
+    "constraints": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        }
+      }
+    },
+    "waiting_for_user": {
+      "type": "boolean"
+    }
+  }
+}
