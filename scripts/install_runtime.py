@@ -85,7 +85,11 @@ def planned(home):
     config.setdefault("hooks", {})
     command = shlex.join([sys.executable, str(home / MANAGED[0]), f"--package={OWN}", "hook"])
     for kind in ("SessionStart", "UserPromptSubmit", "Stop"):
-        group = {"hooks": [{"type": "command", "command": command, "timeout": 3}]}
+        labels = {"SessionStart": "Навыки — восстановление карты",
+                  "UserPromptSubmit": "Навыки — отметка текущего хода",
+                  "Stop": "Навыки — проверка сохранённой карты"}
+        group = {"hooks": [{"type": "command", "command": command, "timeout": 3,
+                            "statusMessage": labels[kind]}]}
         if kind == "SessionStart":
             group["matcher"] = "startup|resume|compact"
             group["hooks"][0]["additionalContextLimit"] = 1000
