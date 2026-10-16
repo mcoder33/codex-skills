@@ -2,7 +2,7 @@
 
 Для `main` обязательны `Skill structure`, `Local links` и `Secret scan` от GitHub Actions. Ветка должна быть актуальна относительно `main`; защита действует также для администраторов, прямой push, force push и удаление запрещены. Обязательное чужое review не включено: репозиторием управляет один владелец.
 
-CI запускается на каждом PR и push в main без фильтра путей. Код PR выполняется только с read-only token и без сохранённых checkout credentials. Actions закреплены SHA; Gitleaks 8.24.3 проверяется по SHA-256. Пользовательские secrets CI не использует.
+CI настроен на `pull_request` и `push` в main без фильтра путей. Слияние через `GITHUB_TOKEN` не порождает новые workflow runs на `push`: обязательные проверки доказываются на PR до слияния. Если позже появятся release/deploy workflows, для их запуска после bot merge потребуется отдельное решение; новый PAT или GitHub App здесь не настраивается. Код PR выполняется только с read-only token и без сохранённых checkout credentials. Actions закреплены SHA; Gitleaks 8.24.3 проверяется по SHA-256. Пользовательские secrets CI не использует.
 
 Структура: каждый отслеживаемый каталог в `skills/` содержит SKILL.md с YAML frontmatter, совпадающим lowercase `name`, непустым `description` и телом. Ссылки: Markdown links/images, включая reference links, должны вести на отслеживаемый файл внутри репозитория; проверяются также wiki links шаблона vault. Фрагменты `#anchor` и внешние HTTP(S)/mailto URL не проверяются. Примеры ссылок внутри code blocks не проверяются.
 
