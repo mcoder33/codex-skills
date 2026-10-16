@@ -245,6 +245,7 @@ def hook(payload, root=None):
             if not turn:
                 return {"systemMessage": "Skill state: Stop has no turn_id; checkpoint freshness unknown."}
             if state.get("last_checkpoint_turn_id") == turn and map_current(state):
+                event(path, "stop_checkpoint_current", turn, state["revision"])
                 return {}
             if not event(path, "missing_checkpoint", turn, state["revision"]):
                 return {}

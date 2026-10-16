@@ -115,6 +115,8 @@ class RuntimeTest(unittest.TestCase):
         self.activate()
         self.checkpoint()
         self.assertEqual(self.event("Stop", turn_id="turn-one"), {})
+        events = [json.loads(p.read_text()) for p in (self.path.parent / "events").glob("*.json")]
+        self.assertTrue(any(e["event"] == "stop_checkpoint_current" for e in events))
         first = self.event("Stop", turn_id="turn-two")
         self.assertIn("systemMessage", first)
         self.assertNotIn("decision", first)
