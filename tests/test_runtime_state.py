@@ -111,6 +111,15 @@ class RuntimeTest(unittest.TestCase):
             self.call("checkpoint", 2, input=str(inp), map=str(self.map), map_sha256="0"*64, turn="two")
         self.assertEqual(runtime.read_json(self.path)["revision"], 2)
 
+    def test_input_snapshot_can_use_a_symlinked_temporary_directory(self):
+        self.activate()
+        self.checkpoint()
+        alias = self.base / "temporary-alias"
+        alias.symlink_to(self.base, target_is_directory=True)
+        state = self.call("checkpoint", 2, input=str(alias / "checkpoint.json"),
+                          map=str(self.map), map_sha256=runtime.map_digest(self.map)[1], turn="two")
+        self.assertEqual(state["last_checkpoint_turn_id"], "two")
+
     def test_stop_accepts_waiting_and_deduplicates_warning(self):
         self.activate()
         self.checkpoint()

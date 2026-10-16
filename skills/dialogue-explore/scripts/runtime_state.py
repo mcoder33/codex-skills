@@ -173,7 +173,9 @@ def mutate(args):
         elif not current or not current["active"]:
             raise ValueError("no active skill")
         if args.command == "checkpoint":
-            fields = checkpoint_fields(read_json(Path(args.input)))
+            # Input is caller-selected read-only data, not a managed state destination.
+            # macOS tempfile paths commonly traverse /var -> /private/var.
+            fields = checkpoint_fields(read_json(Path(args.input).expanduser().resolve(strict=True)))
             map_path, sha = map_digest(args.map)
             if sha != args.map_sha256:
                 raise ValueError("map changed since agent snapshot")
