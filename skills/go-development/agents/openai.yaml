@@ -1,0 +1,7 @@
+interface:
+  display_name: "Go Development"
+  short_description: "Go: связный код, данные, конкурентность и проверки"
+  default_prompt: "Примени $go-development: сохрани объём задачи, сделай Go-код понятным, проверь владение данными и поведение."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,7 +1,0 @@
-interface:
-  display_name: "Связная разработка"
-  short_description: "Законченные операции, ясные границы и полный объём"
-  default_prompt: "Примени $cohesive-development к разработке: сохрани объём задачи, выдели законченные операции и проверь их поведение."
-
-policy:
-  allow_implicit_invocation: true
