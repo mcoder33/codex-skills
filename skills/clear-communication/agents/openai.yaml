@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ясное изложение"
+  short_description: "Понятные объяснения, исследования и планы"
+  default_prompt: "Примени $clear-communication: объясни результат понятно, сохрани основания и ограничения."
