@@ -1,0 +1,6 @@
+interface:
+  display_name: "Оркестратор"
+  short_description: "Делегирование одной задачи с экономным выбором моделей"
+  default_prompt: "Используй $orchestrate для этой задачи."
+policy:
+  allow_implicit_invocation: false
